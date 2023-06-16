@@ -2,12 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-xmin = -1
-xmax = 1
-ymin = -1
-ymax = 1
-
-
 class IndexTracker:
     def __init__(self, ax, X):
         self.index = 0
