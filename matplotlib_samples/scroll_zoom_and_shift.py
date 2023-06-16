@@ -3,12 +3,10 @@ import matplotlib.pyplot as plt
 from matplotlib.backend_bases import MouseButton
 
 
-class IndexTracker:
-    def __init__(self, ax, X):
+class ViewController:
+    def __init__(self, ax):
         self.index = 0
-        self.X = X
         self.ax = ax
-        self.im = ax.imshow(self.X[:, :, self.index])
 
         # 描画範囲取得
         self.xmin, self.xmax = self.ax.get_xlim()
@@ -112,7 +110,6 @@ class IndexTracker:
         self.ymax -= dy
 
     def update(self, scroll=0):
-        self.im.set_data(self.X[:, :, self.index])
         self.ax.set_title(
             f'Use scroll wheel to navigate\nindex {self.index}')
 
@@ -128,16 +125,17 @@ class IndexTracker:
         print(f"xlim: {[self.xmin, self.xmax]}",
               f"ylim: {[self.ymin, self.ymax]}")
 
-        self.im.axes.figure.canvas.draw()
+        self.ax.figure.canvas.draw()
 
 
 x, y, z = np.ogrid[-10:10:100j, -10:10:100j, 1:10:20j]
 X = np.sin(x * y * z) / (x * y * z)
 
 fig, ax = plt.subplots()
+ax.imshow(X[:, :, 0])
 # create an IndexTracker and make sure it lives during the whole
 # lifetime of the figure by assigning it to a variable
-tracker = IndexTracker(ax, X)
+tracker = ViewController(ax)
 
 fig.canvas.mpl_connect('scroll_event', tracker.on_scroll)
 fig.canvas.mpl_connect('button_release_event', tracker.on_button_release)
