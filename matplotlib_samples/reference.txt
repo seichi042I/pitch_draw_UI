@@ -15,3 +15,6 @@ https://matplotlib.org/stable/gallery/event_handling/pick_event_demo.html
 
 # zoom window
 https://matplotlib.org/stable/gallery/event_handling/zoom_window.html
+
+# button press, release, move
+https://matplotlib.org/stable/gallery/event_handling/coords_demo.html
