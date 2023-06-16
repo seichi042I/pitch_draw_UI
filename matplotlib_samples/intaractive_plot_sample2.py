@@ -1,3 +1,4 @@
+# プロットされた点をマウスのドラッグで動かす
 import matplotlib.pyplot as plt
 
 
