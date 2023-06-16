@@ -1,1 +1,14 @@
+# インタラクティブ
 https://qiita.com/ceptree/items/c9239ce4e442482769b3
+
+# 描画範囲
+https://pystyle.info/matplotlib-set-xy-lim/
+
+# scroll_event
+https://matplotlib.org/stable/gallery/event_handling/image_slices_viewer.html
+
+# key_press_event
+https://matplotlib.org/stable/gallery/event_handling/keypress_demo.html
+
+# pick_event
+https://matplotlib.org/stable/gallery/event_handling/pick_event_demo.html
