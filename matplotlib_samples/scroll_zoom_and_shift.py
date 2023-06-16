@@ -95,6 +95,20 @@ class ViewController:
         self.ymin += dy
         self.ymax -= dy
 
+    def x_shift(self, direction: int, tick: float = 0.1):
+        """
+        現在の描画範囲のtick分だけ上下方向に移動する
+
+        Args:
+            direction (int): 移動する方向を1,-1で指定する。1で上に移動。-1で下に移動
+            tick (float): 例えば、描画範囲が-10~10でtick=0.1の場合、+-2ずつ移動する
+        """
+        xlim_range = self.xmax - self.xmin
+        dx = abs(xlim_range)*tick*direction
+
+        self.xmin -= dx
+        self.xmax -= dx
+
     def y_shift(self, direction: int, tick: float = 0.1):
         """
         現在の描画範囲のtick分だけ上下方向に移動する
@@ -116,8 +130,8 @@ class ViewController:
         # 描画範囲変更
         if self.ctrl_key:
             self.zoom(1.1**scroll)
-        # elif self.shift_key:
-        #     x_shift()
+        elif self.shift_key:
+            self.x_shift(scroll)
         else:
             self.y_shift(scroll)
         self.ax.set_xlim(self.xmin, self.xmax)
