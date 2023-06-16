@@ -12,3 +12,6 @@ https://matplotlib.org/stable/gallery/event_handling/keypress_demo.html
 
 # pick_event
 https://matplotlib.org/stable/gallery/event_handling/pick_event_demo.html
+
+# zoom window
+https://matplotlib.org/stable/gallery/event_handling/zoom_window.html
