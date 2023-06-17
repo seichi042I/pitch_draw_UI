@@ -5,6 +5,17 @@ from matplotlib.backend_bases import MouseButton
 
 
 class ViewController:
+    """
+    キー・マウス入力によって、matplotlibの図を拡大縮小・範囲の移動をするクラス
+    マウスホイール：                上下移動
+    shift + マウスホイール：        左右移動
+    ctrl + マウスホイール：         y軸の拡大縮小
+    ctrl+shift + マウスホイール：   x軸の拡大縮小
+    右クリック：                    拡大縮小のリセット
+    ctrl + 右クリック：                    //       y軸のみ
+    ctrl+shift + 右クリック：              //       x軸のみ
+    """
+
     def __init__(self, fig, ax):
         """
         変数の初期化とイベントと関数の紐づけ
