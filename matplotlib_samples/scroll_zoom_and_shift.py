@@ -7,6 +7,7 @@ from matplotlib.backend_bases import MouseButton
 class ViewController:
     """
     キー・マウス入力によって、matplotlibの図を拡大縮小・範囲の移動をするクラス
+
     マウスホイール：                上下移動
     shift + マウスホイール：        左右移動
     ctrl + マウスホイール：         y軸の拡大縮小
@@ -21,8 +22,8 @@ class ViewController:
         変数の初期化とイベントと関数の紐づけ
 
         Args:
-            fig (_type_): _description_
-            ax (_type_): _description_
+            fig (_type_): matplotlibのfig
+            ax (_type_): matplotlibのax
         """
         self.index = 0
         self.fig = fig
@@ -152,7 +153,7 @@ class ViewController:
             tick (float): 例えば、描画範囲が-10~10でtick=0.1の場合、+-2ずつ移動する
         """
         xlim_range = self.xmax - self.xmin
-        dx = abs(xlim_range)*tick*direction
+        dx = xlim_range*tick*direction
 
         self.xmin -= dx
         self.xmax -= dx
@@ -166,10 +167,10 @@ class ViewController:
             tick (float): 例えば、描画範囲が-10~10でtick=0.1の場合、+-2ずつ移動する
         """
         ylim_range = self.ymax - self.ymin
-        dy = abs(ylim_range)*tick*direction
+        dy = ylim_range*tick*direction
 
-        self.ymin -= dy
-        self.ymax -= dy
+        self.ymin += dy
+        self.ymax += dy
 
     def update(self, scroll=0):
         self.ax.set_title(
@@ -193,11 +194,11 @@ class ViewController:
         self.fig.canvas.draw()
 
 
-x, y, z = np.ogrid[-10:10:100j, -10:10:100j, 1:10:20j]
-X = np.sin(x * y * z) / (x * y * z)
+x = np.arange(4*np.pi*25)/25
+Y = np.sin(x)
 
 fig, ax = plt.subplots()
-ax.imshow(X[:, :, 0])
+ax.plot(Y)
 
 # create an IndexTracker and make sure it lives during the whole
 # lifetime of the figure by assigning it to a variable
