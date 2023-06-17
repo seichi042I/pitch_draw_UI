@@ -1,20 +1,38 @@
+from copy import copy
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backend_bases import MouseButton
 
 
 class ViewController:
-    def __init__(self, ax):
+    def __init__(self, fig, ax):
+        """
+        変数の初期化とイベントと関数の紐づけ
+
+        Args:
+            fig (_type_): _description_
+            ax (_type_): _description_
+        """
         self.index = 0
+        self.fig = fig
         self.ax = ax
 
         # 描画範囲取得
-        self.xmin, self.xmax = self.ax.get_xlim()
-        self.ymin, self.ymax = self.ax.get_ylim()
+        self.xmin_ini, self.xmax_ini = self.xmin, self.xmax = self.ax.get_xlim()
+        self.ymin_ini, self.ymax_ini = self.ymin, self.ymax = self.ax.get_ylim()
 
         # key state
         self.shift_key = False
         self.ctrl_key = False
+
+        # イベントと関数の紐づけ
+        fig.canvas.mpl_connect('scroll_event', self.on_scroll)
+        fig.canvas.mpl_connect('button_press_event',
+                               self.on_button_press)
+        fig.canvas.mpl_connect('button_release_event',
+                               self.on_button_release)
+        fig.canvas.mpl_connect('key_press_event', self.on_key_press)
+        fig.canvas.mpl_connect('key_release_event', self.on_key_release)
         self.update()
 
     def on_scroll(self, event):
@@ -32,6 +50,23 @@ class ViewController:
         print(f"shift_key: {self.shift_key}    ctrl_key:{self.ctrl_key}")
         self.update(increment)
 
+    def on_button_press(self, event):
+        """
+        マウスの左クリックが話されたとき、その時点での描画範囲を取得する
+
+        Args:
+            event (_type_): _description_
+        """
+        if event.button is MouseButton.RIGHT:
+            if not (not self.shift_key and self.ctrl_key):
+                self.xmin, self.xmax = copy(self.xmin_ini), copy(self.xmax_ini)
+            if not (self.shift_key and self.ctrl_key):
+                self.ymin, self.ymax = copy(self.ymin_ini), copy(self.ymax_ini)
+
+            print(f"xlim: {[self.xmin, self.xmax]}",
+                  f"ylim: {[self.ymin, self.ymax]}")
+        self.update()
+
     def on_button_release(self, event):
         """
         マウスの左クリックが話されたとき、その時点での描画範囲を取得する
@@ -42,7 +77,8 @@ class ViewController:
         if event.button is MouseButton.LEFT:
             self.xmin, self.xmax = self.ax.get_xlim()
             self.ymin, self.ymax = self.ax.get_ylim()
-            print(f'get ax xy lims:{self.xmin,self.xmax,self.ymin,self.ymax}')
+            print(f"xlim: {[self.xmin, self.xmax]}",
+                  f"ylim: {[self.ymin, self.ymax]}")
 
     def on_key_press(self, event):
         """
@@ -52,9 +88,9 @@ class ViewController:
             event (_type_): _description_
         """
         print('press', event.key)
-        if event.key == 'shift':
+        if 'shift' in event.key:
             self.shift_key = True
-        if event.key == "control":
+        if "control" in event.key:
             self.ctrl_key = True
 
     def on_key_release(self, event):
@@ -65,12 +101,12 @@ class ViewController:
             event (_type_): _description_
         """
         print('release', event.key)
-        if event.key == 'shift':
+        if 'shift' in event.key:
             self.shift_key = False
-        if event.key == "control":
+        if 'control' in event.key:
             self.ctrl_key = False
 
-    def zoom(self, magnification: float):
+    def zoom(self, magnification: float, target: str = 'xy'):
         """
         描画範囲の拡大縮小
 
@@ -89,11 +125,12 @@ class ViewController:
         if magnification < 0:
             dx = -dx
             dy = -dy
-
-        self.xmin += dx
-        self.xmax -= dx
-        self.ymin += dy
-        self.ymax -= dy
+        if 'x' in target:
+            self.xmin += dx
+            self.xmax -= dx
+        if 'y' in target:
+            self.ymin += dy
+            self.ymax -= dy
 
     def x_shift(self, direction: int, tick: float = 0.1):
         """
@@ -128,8 +165,10 @@ class ViewController:
             f'Use scroll wheel to navigate\nindex {self.index}')
 
         # 描画範囲変更
-        if self.ctrl_key:
-            self.zoom(1.1**scroll)
+        if self.ctrl_key and self.shift_key:
+            self.zoom(1.1**scroll, target='x')
+        elif self.ctrl_key:
+            self.zoom(1.1**scroll, target='y')
         elif self.shift_key:
             self.x_shift(scroll)
         else:
@@ -139,7 +178,8 @@ class ViewController:
         print(f"xlim: {[self.xmin, self.xmax]}",
               f"ylim: {[self.ymin, self.ymax]}")
 
-        self.ax.figure.canvas.draw()
+        self.ax.set_aspect('auto')
+        self.fig.canvas.draw()
 
 
 x, y, z = np.ogrid[-10:10:100j, -10:10:100j, 1:10:20j]
@@ -147,12 +187,10 @@ X = np.sin(x * y * z) / (x * y * z)
 
 fig, ax = plt.subplots()
 ax.imshow(X[:, :, 0])
+
 # create an IndexTracker and make sure it lives during the whole
 # lifetime of the figure by assigning it to a variable
-tracker = ViewController(ax)
+vc = ViewController(fig, ax)
 
-fig.canvas.mpl_connect('scroll_event', tracker.on_scroll)
-fig.canvas.mpl_connect('button_release_event', tracker.on_button_release)
-fig.canvas.mpl_connect('key_press_event', tracker.on_key_press)
-fig.canvas.mpl_connect('key_release_event', tracker.on_key_release)
+
 plt.show()
