@@ -5,9 +5,10 @@ class LineDrawer:
     """
     マウスのxデータ座用に一番近いプロットをマウスのy座標に変更する
     """
-    def __init__(self, fig, ax):
+    def __init__(self, fig, ax, ydata:np.ndarray):
         self.fig = fig
         self.ax = ax
+        self.ydata = ydata
         self.before_mouse_xdata = None
         self.before_mouse_ydata = None
 
@@ -38,6 +39,7 @@ class LineDrawer:
                     if b_idx < idx:
                         for n, idx in enumerate(range(b_idx,idx+1)):
                             ydata[idx] = self.before_mouse_ydata + step_d*n
+                            
                     else:
                         for n, idx in enumerate(reversed(range(idx,b_idx+1))):
                             ydata[idx] = self.before_mouse_ydata + step_d*n
@@ -49,6 +51,8 @@ class LineDrawer:
         self.before_mouse_xdata = event.xdata
         self.before_mouse_ydata = event.ydata
         self.fig.canvas.draw()
+        self.ydata[:] = self.ax.lines[0].get_ydata()
+        print('dummpy')
 
     def dummy_picker(self, artist, mouseevent):
         """

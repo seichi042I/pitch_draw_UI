@@ -12,11 +12,12 @@ def test_line_drawer():
     y = np.sin(x)
 
     ax.plot(x, y, marker='.')
-    LineDrawer(fig, ax)
+    data = y
+    ld = LineDrawer(fig, ax,data)
 
-    before = copy(ax.lines[0].get_ydata())
+    before = copy(data)
     plt.show()
-    after = copy(ax.lines[0].get_ydata())
+    after = copy(data)
     
     # プロットが書き換えられているか
     assert not all(before == after)
