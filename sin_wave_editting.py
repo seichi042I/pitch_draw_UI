@@ -32,7 +32,7 @@ class PlotPicker:
                 n_step = abs(idx - b_idx)
                 
                 if n_step != 0:
-                    diff = event.ydata -self.before_mouse_ydata
+                    diff = event.ydata - self.before_mouse_ydata
                     step_d = diff/n_step
                     
                     if b_idx < idx:
