@@ -173,8 +173,6 @@ class ViewController:
         self.ymax += dy
 
     def update(self, scroll=0):
-        self.ax.set_title(
-            f'Use scroll wheel to navigate\nindex {self.index}')
 
         # 描画範囲変更
         if self.ctrl_key and self.shift_key:
