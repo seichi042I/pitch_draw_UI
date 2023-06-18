@@ -7,7 +7,6 @@ from ..util.line_drawer import LineDrawer
 
 def test_line_drawer():
     fig, ax = plt.subplots()
-    ax.set_title('custom picker for line data')
     x = np.arange(2*np.pi*5)/5
     y = np.sin(x)
 
