@@ -27,6 +27,7 @@ class LineDrawer:
             
             idx = np.argmin(np.abs(xdata - event.xdata))
             
+            ydata[idx] = event.ydata
             # 線形補間
             if self.before_mouse_xdata is not None:
                 b_idx = np.argmin(np.abs(xdata - self.before_mouse_xdata))
@@ -43,8 +44,7 @@ class LineDrawer:
                     else:
                         for n, idx in enumerate(reversed(range(idx,b_idx+1))):
                             ydata[idx] = self.before_mouse_ydata + step_d*n
-            else:
-                ydata[idx] = event.ydata
+
                 
             self.ax.lines[0].set_ydata(ydata)
             
