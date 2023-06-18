@@ -52,7 +52,6 @@ class LineDrawer:
         self.before_mouse_ydata = event.ydata
         self.fig.canvas.draw()
         self.ydata[:] = self.ax.lines[0].get_ydata()
-        print('dummpy')
 
     def dummy_picker(self, artist, mouseevent):
         """
