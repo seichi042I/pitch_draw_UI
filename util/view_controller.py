@@ -56,10 +56,10 @@ class ViewController:
         Args:
             event (_type_): _description_
         """
-        print(event.button, event.step)
+        # print(event.button, event.step)
         increment = 1 if event.button == 'up' else -1
 
-        print(f"shift_key: {self.shift_key}    ctrl_key:{self.ctrl_key}")
+        # print(f"shift_key: {self.shift_key}    ctrl_key:{self.ctrl_key}")
         self.update(increment)
 
     def on_button_press(self, event):
@@ -75,8 +75,8 @@ class ViewController:
             if not (self.shift_key and self.ctrl_key):
                 self.ymin, self.ymax = copy(self.ymin_ini), copy(self.ymax_ini)
 
-            print(f"xlim: {[self.xmin, self.xmax]}",
-                  f"ylim: {[self.ymin, self.ymax]}")
+        #     print(f"xlim: {[self.xmin, self.xmax]}",
+        #           f"ylim: {[self.ymin, self.ymax]}")
         self.update()
 
     def on_button_release(self, event):
@@ -89,8 +89,8 @@ class ViewController:
         if event.button is MouseButton.LEFT:
             self.xmin, self.xmax = self.ax.get_xlim()
             self.ymin, self.ymax = self.ax.get_ylim()
-            print(f"xlim: {[self.xmin, self.xmax]}",
-                  f"ylim: {[self.ymin, self.ymax]}")
+            # print(f"xlim: {[self.xmin, self.xmax]}",
+            #       f"ylim: {[self.ymin, self.ymax]}")
 
     def on_key_press(self, event):
         """
@@ -99,7 +99,7 @@ class ViewController:
         Args:
             event (_type_): _description_
         """
-        print('press', event.key)
+        # print('press', event.key)
         if 'shift' in event.key:
             self.shift_key = True
         if "control" in event.key:
@@ -112,7 +112,7 @@ class ViewController:
         Args:
             event (_type_): _description_
         """
-        print('release', event.key)
+        # print('release', event.key)
         if 'shift' in event.key:
             self.shift_key = False
         if 'control' in event.key:
